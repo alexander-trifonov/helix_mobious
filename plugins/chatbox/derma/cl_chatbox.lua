@@ -329,22 +329,33 @@ function PANEL:AddLine(elements, bShouldScroll)
 			local color = team.GetColor(v:Team())
 
 			buffer[#buffer + 1] = string.format("<color=%d,%d,%d>%s", color.r, color.g, color.b,
-				v:GetName():gsub("<", "&lt;"):gsub(">", "&gt;"))
+			v:GetName():gsub("<", "&lt;"):gsub(">", "&gt;"))
 		else
 			buffer[#buffer + 1] = tostring(v):gsub("<", "&lt;"):gsub(">", "&gt;"):gsub("%b**", function(value)
 				local inner = value:utf8sub(2, -2)
-
 				if (inner:find("%S")) then
 					return "<font=ixChatFontItalics>" .. value:utf8sub(2, -2) .. "</font>"
 				end
 			end)
 		end
 	end
-
+	local text = table.concat(buffer)
+	if (self.entries[#self.entries] != nil) then
+		if (text == self.entries[#self.entries].LastText) then
+			local color = Color(math.Clamp(self.repeations * 60, 0, 255), 50, math.Clamp(180 - self.repeations * 40, 0, 255))
+			buffer[#buffer + 1] = string.format("<color=%d,%d,%d>%s", color.r, color.g, color.b, " x"..self.repeations)
+			self.entries[#self.entries]:SetMarkup(table.concat(buffer))
+			self.repeations = self.repeations + 1
+			return
+		end
+	end
+	self.repeations = 2
 	local panel = self:Add("ixChatMessage")
 	panel:Dock(TOP)
 	panel:InvalidateParent(true)
-	panel:SetMarkup(table.concat(buffer))
+	panel:SetMarkup(text)
+	panel.LastText = text
+	
 
 	if (#self.entries >= maxChatEntries) then
 		local oldPanel = table.remove(self.entries, 1)
