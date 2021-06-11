@@ -278,7 +278,7 @@ function ENT:GetEntityMenu(client)
 	itemTable.entity = self
 
 	for k, v in SortedPairs(itemTable.functions) do
-		if (k == "take" or k == "combine") then
+		if (k == "combine") then
 			continue
 		end
 
