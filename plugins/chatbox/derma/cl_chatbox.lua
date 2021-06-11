@@ -328,7 +328,7 @@ function PANEL:AddLine(elements, bShouldScroll)
 		elseif (type(v) == "Player") then
 			local color = team.GetColor(v:Team())
 
-			buffer[#buffer + 1] = string.format("<color=%d,%d,%d>%s", color.r, color.g, color.b,
+			buffer[#buffer + 1] = string.format("<font=ixStalkerChatName><color=%d,%d,%d>%s</font>", color.r, color.g, color.b,
 			v:GetName():gsub("<", "&lt;"):gsub(">", "&gt;"))
 		else
 			buffer[#buffer + 1] = tostring(v):gsub("<", "&lt;"):gsub(">", "&gt;"):gsub("%b**", function(value)
@@ -375,7 +375,7 @@ PANEL = {}
 DEFINE_BASECLASS("DTextEntry")
 
 function PANEL:Init()
-	self:SetFont("ixChatFont")
+	self:SetFont("ixStalkerChat")
 	self:SetUpdateOnType(true)
 	self:SetHistoryEnabled(true)
 

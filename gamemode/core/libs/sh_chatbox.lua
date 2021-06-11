@@ -158,9 +158,9 @@ function ix.chat.Register(chatType, data)
 				color = self:GetColor(speaker, text, info)
 			end
 
-			local translated = L2(chatType.."Format", name, text)
+			local translated = L2(chatType.."Format", text)
 
-			chat.AddText(color, translated or string.format(self.format, name, text))
+			chat.AddText(speaker, color, translated or string.format(self.format, name, text))
 		end
 	end
 
