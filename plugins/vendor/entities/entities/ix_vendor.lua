@@ -85,6 +85,7 @@ function ENT:GetPrice(uniqueID, selling, client)
 		price = math.floor(price * (self.scale or 0.5))
 	end
 	price = hook.Run("itemGetPrice", uniqueID, selling, client, price)
+	
 	return price
 end
 
