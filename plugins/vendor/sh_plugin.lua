@@ -333,8 +333,8 @@ if (SERVER) then
 
 		if (entity.items[uniqueID] and
 			hook.Run("CanPlayerTradeWithVendor", client, entity, uniqueID, isSellingToVendor) != false) then
-			local price = entity:GetPrice(uniqueID, isSellingToVendor)
-
+			local price = entity:GetPrice(uniqueID, isSellingToVendor, client)
+			print("on server: "..price)
 			if (isSellingToVendor) then
 				local found = false
 				local name

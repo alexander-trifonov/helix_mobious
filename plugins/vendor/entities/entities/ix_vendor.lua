@@ -77,14 +77,14 @@ function ENT:GetStock(uniqueID)
 	end
 end
 
-function ENT:GetPrice(uniqueID, selling)
+function ENT:GetPrice(uniqueID, selling, client)
 	local price = ix.item.list[uniqueID] and self.items[uniqueID] and
 		self.items[uniqueID][VENDOR_PRICE] or ix.item.list[uniqueID].price or 0
 
 	if (selling) then
 		price = math.floor(price * (self.scale or 0.5))
 	end
-
+	price = hook.Run("itemGetPrice", uniqueID, selling, client, price)
 	return price
 end
 
