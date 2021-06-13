@@ -145,7 +145,7 @@ if (SERVER) then
 
 		if (IsValid(client)) then
 			-- Set the faction, model, and character index for the player.
-			local model = self:GetModel()
+			local model = self:GetModel() -- outdated model, not synced with server btw
 
 			client:SetNetVar("char", self:GetID())
 			client:SetTeam(self:GetFaction())
@@ -153,7 +153,10 @@ if (SERVER) then
 
 			-- Apply saved body groups.
 			for k, v in pairs(self:GetData("groups", {})) do
-				client:SetBodygroup(k, v)
+				local index = client:FindBodygroupByName(k)
+				if (index  > -1) then
+					client:SetBodygroup(index, v)
+				end
 			end
 
 			-- Apply a saved skin.

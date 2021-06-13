@@ -19,7 +19,10 @@ local function SetCharacter(self, character)
 
 		if (istable(bodygroups)) then
 			for k, v in pairs(bodygroups) do
-				self:SetBodygroup(k, v)
+				local index = self:FindBodygroupByName(k)
+				if (index  > -1) then
+					self:SetBodygroup(index, v)
+				end
 			end
 		end
 	else

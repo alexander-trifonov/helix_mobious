@@ -154,6 +154,7 @@ ix.command.Add("CharSetModel", {
 	OnRun = function(self, client, target, model)
 		target:SetModel(model)
 		target:GetPlayer():SetupHands()
+		target:SetData("modelOriginal", model)
 
 		for _, v in ipairs(player.GetAll()) do
 			if (self:OnCheckAccess(v) or v == target:GetPlayer()) then
@@ -182,33 +183,33 @@ ix.command.Add("CharSetSkin", {
 	end
 })
 
-ix.command.Add("CharSetBodygroup", {
-	description = "@cmdCharSetBodygroup",
-	adminOnly = true,
-	arguments = {
-		ix.type.character,
-		ix.type.string,
-		bit.bor(ix.type.number, ix.type.optional)
-	},
-	OnRun = function(self, client, target, bodygroup, value)
-		local index = target:GetPlayer():FindBodygroupByName(bodygroup)
+-- ix.command.Add("CharSetBodygroup", {
+-- 	description = "@cmdCharSetBodygroup",
+-- 	adminOnly = true,
+-- 	arguments = {
+-- 		ix.type.character,
+-- 		ix.type.string,
+-- 		bit.bor(ix.type.number, ix.type.optional)
+-- 	},
+-- 	OnRun = function(self, client, target, bodygroup, value)
+-- 		local index = target:GetPlayer():FindBodygroupByName(bodygroup)
 
-		if (index > -1) then
-			if (value and value < 1) then
-				value = nil
-			end
+-- 		if (index > -1) then
+-- 			if (value and value < 1) then
+-- 				value = nil
+-- 			end
 
-			local groups = target:GetData("groups", {})
-				groups[index] = value
-			target:SetData("groups", groups)
-			target:GetPlayer():SetBodygroup(index, value or 0)
+-- 			local groups = target:GetData("groups", {})
+-- 				groups[index] = value
+-- 			target:SetData("groups", groups)
+-- 			target:GetPlayer():SetBodygroup(index, value or 0)
 
-			ix.util.NotifyLocalized("cChangeGroups", nil, client:GetName(), target:GetName(), bodygroup, value or 0)
-		else
-			return "@invalidArg", 2
-		end
-	end
-})
+-- 			ix.util.NotifyLocalized("cChangeGroups", nil, client:GetName(), target:GetName(), bodygroup, value or 0)
+-- 		else
+-- 			return "@invalidArg", 2
+-- 		end
+-- 	end
+-- })
 
 ix.command.Add("CharSetAttribute", {
 	description = "@cmdCharSetAttribute",
