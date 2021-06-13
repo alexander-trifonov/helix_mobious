@@ -36,13 +36,35 @@ if (CLIENT) then
 			surface.DrawRect(w - 14, h - 14, 8, 8)
 		end
 	end
+
+	function ITEM:PopulateTooltip(tooltip)
+		if (self.popularBy) then
+			local popularBy = tooltip:AddRow("popularBy")
+			local text = self.popularBy
+			popularBy:SetColor(Color(150, 150, 150))
+			popularBy:SetText(text)
+			popularBy:SizeToContents()
+		end
+		if (self:GetData("durability", self.durability)) then
+            local durability = tooltip:AddRow("durability")
+            local text = ((self.durabilityDesc) or ("Осталось прочности: "))..(self:GetData("durability") or self.durability)
+            durability:SetColor(Color(60, 150, 60))
+            durability:SetText(text or "")
+            durability:SizeToContents()
+        end
+	end
+end
+
+function ITEM:OnInstanced(index, x, y, item)
+    self:SetData("durability", self:GetData("durability") or self.durability or 100)
+	self:SetData("outfitCategory", self:GetData("outfitCategory") or self.outfitCategory or "other")
 end
 
 function ITEM:AddOutfit(client)
 	local character = client:GetCharacter()
 
 	self:SetData("equip", true)
-
+	
 	if istable(self.replacements) then
 		for k, v in pairs(self.replacements) do
 			character:SetModel(self.player:GetModel():gsub(v[1], v[2]))
