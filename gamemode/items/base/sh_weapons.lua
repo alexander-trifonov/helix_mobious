@@ -11,6 +11,23 @@ ITEM.isGrenade = false
 ITEM.weaponCategory = "sidearm"
 ITEM.useSound = "items/ammo_pickup.wav"
 
+
+if (SERVER) then
+    util.AddNetworkString("ixOnEquipWeapon")
+end
+
+if (CLIENT) then
+    net.Receive("ixOnEquipWeapon", function()
+        local weapon = LocalPlayer():GetActiveWeapon()
+        local attlist = net.ReadTable()
+        if (!table.IsEmpty(attlist)) then
+            for k,v in pairs(attlist) do
+                weapon:Attach(k, v)
+            end
+        end
+    end)
+end
+
 -- Inventory drawing
 if (CLIENT) then
 	function ITEM:PaintOver(item, w, h)
@@ -25,6 +42,31 @@ if (CLIENT) then
 			local name = tooltip:GetRow("name")
 			name:SetBackgroundColor(derma.GetColor("Success", tooltip))
 		end
+
+		if (self:GetData("durability", self.durability)) then
+            local durability = tooltip:AddRow("durability")
+            local text = ((self.durabilityDesc) or ("Осталось прочности: "))..(self:GetData("durability") or self.durability)
+            durability:SetColor(Color(60, 150, 60))
+            durability:SetText(text or "")
+            durability:SizeToContents()
+        end
+
+		if (self:GetData("ammo")) then
+			local ammo = tooltip:AddRow("ammo")
+			local text = (self:GetData("ammo"))
+			ammo:SetColor(Color(150, 150, 150))
+			ammo:SetText(text)
+			ammo:SizeToContents()
+		end
+	end
+end
+
+function ITEM:OnInstanced(index, x, y, item)
+    self:SetData("durability", self:GetData("durability") or self.durability or 66)
+    self:SetData("attachments", self.defaultAtt)
+    self:SetData("class", self.class)
+	if (self.PostInstanced) then
+		self:PostInstanced()
 	end
 end
 
@@ -182,6 +224,23 @@ function ITEM:Equip(client, bNoSelect, bNoSound)
 		end
 
 		weapon.ixItem = self
+
+		if (self:GetData("attachments") != nil) then
+			-- Need a delay because client:EmitSound needs time
+			timer.Simple(0.5, function()
+				local attlist = self:GetData("attachments", {}) 
+				if (!table.IsEmpty(attlist)) then
+					-- Update attachments on client
+					net.Start("ixOnEquipWeapon")
+						net.WriteTable(attlist)
+					net.Send(client)
+					-- Update attachments on server
+					for k,v in pairs(attlist) do
+						weapon:Attach(k, v)
+					end
+				end
+			end)
+		end
 
 		if (self.OnEquipWeapon) then
 			self:OnEquipWeapon(client, weapon)

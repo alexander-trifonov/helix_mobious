@@ -58,6 +58,9 @@ end
 function ITEM:OnInstanced(index, x, y, item)
     self:SetData("durability", self:GetData("durability") or self.durability or 100)
 	self:SetData("outfitCategory", self:GetData("outfitCategory") or self.outfitCategory or "other")
+	if (self.PostInstanced) then
+		self:PostInstanced()
+	end
 end
 
 function ITEM:AddOutfit(client)
