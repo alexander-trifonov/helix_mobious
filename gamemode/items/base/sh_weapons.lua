@@ -20,6 +20,7 @@ if (CLIENT) then
     net.Receive("ixOnEquipWeapon", function()
         local weapon = LocalPlayer():GetActiveWeapon()
         local attlist = net.ReadTable()
+		if (!weapon.Attach) then return false end
         if (!table.IsEmpty(attlist)) then
             for k,v in pairs(attlist) do
                 weapon:Attach(k, v)
@@ -228,6 +229,7 @@ function ITEM:Equip(client, bNoSelect, bNoSound)
 		if (self:GetData("attachments") != nil) then
 			-- Need a delay because client:EmitSound needs time
 			timer.Simple(0.5, function()
+				if (!self:GetData("equip")) then return false end
 				local attlist = self:GetData("attachments", {}) 
 				if (!table.IsEmpty(attlist)) then
 					-- Update attachments on client
