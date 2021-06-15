@@ -45,7 +45,7 @@ if (CLIENT) then
 	})
 end
 
-ix.option.Add("language", ix.type.array, ix.config.language or "english", {
+ix.option.Add("language", ix.type.array, ix.config.language or "russian", {
 	category = "general",
 	bNetworked = true,
 	populate = function()
