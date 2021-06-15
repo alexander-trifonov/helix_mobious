@@ -38,13 +38,14 @@ function ENT:Initialize()
 			physObj:EnableMotion(false)
 			physObj:Sleep()
 		end
-	end
+	end	
 
-	timer.Simple(1, function()
-		if (IsValid(self)) then
-			self:SetAnim()
-		end
-	end)
+	-- timer.Simple(1, function()
+	-- 	print("initializing vendor")
+	-- 	if (IsValid(self)) then
+	-- 		self:SetAnim()
+	-- 	end
+	-- end)
 end
 
 function ENT:CanAccess(client)
@@ -139,6 +140,7 @@ function ENT:HasMoney(amount)
 end
 
 function ENT:SetAnim()
+
 	for k, v in ipairs(self:GetSequenceList()) do
 		if (v:lower():find("idle") and v != "idlenoise") then
 			return self:ResetSequence(k)
@@ -294,10 +296,10 @@ else
 			self:CreateBubble()
 		end
 
-		if ((self.nextAnimCheck or 0) < CurTime()) then
-			self:SetAnim()
-			self.nextAnimCheck = CurTime() + 60
-		end
+		-- if ((self.nextAnimCheck or 0) < CurTime()) then
+		-- 	self:SetAnim()
+		-- 	self.nextAnimCheck = CurTime() + 60
+		-- end
 
 		self:SetNextClientThink(CurTime() + 0.25)
 

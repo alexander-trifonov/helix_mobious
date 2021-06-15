@@ -35,6 +35,25 @@ VENDOR_SELLONLY = 2
 -- Only buy the item from the player.
 VENDOR_BUYONLY = 3
 
+ix.command.Add("VendorSetAnimation", {
+	adminOnly = true,
+	arguments = {
+		ix.type.string
+	},
+	OnRun = function(self, client, sequence)
+		local entity = client:GetEyeTrace().Entity
+		if (entity:GetClass() != "ix_vendor") then
+			return "Нужно смотреть на торговца"
+		end
+		local seqNumber = entity:LookupSequence(sequence)
+		if (seqNumber == -1) then
+			return "Не существующая анимация для этой модели"
+		end
+		entity:ResetSequence(seqNumber)
+	end
+})
+
+
 if (SERVER) then
 	util.AddNetworkString("ixVendorOpen")
 	util.AddNetworkString("ixVendorClose")
@@ -54,6 +73,7 @@ if (SERVER) then
 			local bodygroups = {}
 
 			for _, v in ipairs(entity:GetBodyGroups() or {}) do
+				print(v.id, entity:GetBodygroup(v.id))
 				bodygroups[v.id] = entity:GetBodygroup(v.id)
 			end
 
@@ -70,7 +90,8 @@ if (SERVER) then
 				factions = entity.factions,
 				classes = entity.classes,
 				money = entity.money,
-				scale = entity.scale
+				scale = entity.scale,
+				animation = entity:GetSequence()
 			}
 		end
 
@@ -101,6 +122,7 @@ if (SERVER) then
 			entity:SetDescription(v.description)
 
 			for id, bodygroup in pairs(v.bodygroups or {}) do
+				print(id, bodygroup)
 				entity:SetBodygroup(id, bodygroup)
 			end
 
@@ -109,6 +131,8 @@ if (SERVER) then
 			for uniqueID, data in pairs(v.items) do
 				items[tostring(uniqueID)] = data
 			end
+
+			entity:ResetSequence(v.animation)
 
 			entity.items = items
 			entity.factions = v.factions or {}
