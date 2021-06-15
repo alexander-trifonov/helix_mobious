@@ -73,7 +73,6 @@ if (SERVER) then
 			local bodygroups = {}
 
 			for _, v in ipairs(entity:GetBodyGroups() or {}) do
-				print(v.id, entity:GetBodygroup(v.id))
 				bodygroups[v.id] = entity:GetBodygroup(v.id)
 			end
 
@@ -122,7 +121,6 @@ if (SERVER) then
 			entity:SetDescription(v.description)
 
 			for id, bodygroup in pairs(v.bodygroups or {}) do
-				print(id, bodygroup)
 				entity:SetBodygroup(id, bodygroup)
 			end
 
@@ -358,7 +356,6 @@ if (SERVER) then
 		if (entity.items[uniqueID] and
 			hook.Run("CanPlayerTradeWithVendor", client, entity, uniqueID, isSellingToVendor) != false) then
 			local price = entity:GetPrice(uniqueID, isSellingToVendor, client)
-			print("on server: "..price)
 			if (isSellingToVendor) then
 				local found = false
 				local name

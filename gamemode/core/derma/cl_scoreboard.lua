@@ -343,6 +343,7 @@ end
 vgui.Register("ixScoreboard", PANEL, "DScrollPanel")
 
 hook.Add("CreateMenuButtons", "ixScoreboard", function(tabs)
+	if (hook.Run("BuildScoreboardMenu", LocalPlayer()) == false) then return false end 
 	tabs["scoreboard"] = function(container)
 		container:Add("ixScoreboard")
 	end

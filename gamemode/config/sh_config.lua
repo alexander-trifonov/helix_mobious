@@ -118,7 +118,7 @@ ix.config.Add("walkRatio", 0.5, "How fast one goes when holding ALT.", nil, {
 ix.config.Add("intro", true, "Whether or not the Helix intro is enabled for new players.", nil, {
 	category = "appearance"
 })
-ix.config.Add("music", "music/hl2_song2.mp3", "The default music played in the character menu.", nil, {
+ix.config.Add("music", "ambient/intro.ogg.mp3", "The default music played in the character menu.", nil, {
 	category = "appearance"
 })
 ix.config.Add("communityURL", "https://nebulous.cloud/", "The URL to navigate to when the community button is clicked.", nil, {
