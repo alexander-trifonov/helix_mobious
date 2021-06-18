@@ -809,13 +809,17 @@ do
 	-- @angle[opt=angle_zero] angles The angles at which the item's entity will spawn
 	-- @tab[opt=nil] data Additional data for this item instance
 	function ix.item.Spawn(uniqueID, position, callback, angles, data)
+		local res
 		ix.item.Instance(0, uniqueID, data or {}, 1, 1, function(item)
 			local entity = item:Spawn(position, angles)
 
 			if (callback) then
 				callback(item, entity)
 			end
+			res = entity
+			res.item = item
 		end)
+		return res
 	end
 end
 
